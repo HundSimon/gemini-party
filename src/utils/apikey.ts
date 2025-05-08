@@ -317,9 +317,9 @@ class ApiKeyManager {
             return true;
         }
 
-        // 服务器错误（5xx）可以重试
+        // 服务器错误（5xx）和Bad Request（400）可以重试
         if (error.status) {
-            return error.status >= 500 && error.status < 600;
+            return error.status === 400 || (error.status >= 500 && error.status < 600);
         }
 
         // 网络错误可以重试

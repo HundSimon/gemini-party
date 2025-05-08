@@ -359,7 +359,7 @@ class ApiKeyManager {
       return true;
     }
     if (error.status) {
-      return error.status >= 500 && error.status < 600;
+      return error.status === 400 || (error.status >= 500 && error.status < 600);
     }
     if (error.code) {
       return [
