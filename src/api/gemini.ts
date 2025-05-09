@@ -105,7 +105,10 @@ async function handleGenerateContent(c: Context, model: string, apiKey: string, 
             });
             if (!fetchResponse.ok) {
                 const errorText = await fetchResponse.text();
-                throw new Error(`API 请求失败，状态码: ${fetchResponse.status}: ${errorText}`);
+                const error = new Error(`API 请求失败，状态码: ${fetchResponse.status}: ${errorText}`);
+                // 添加状态码到错误对象中，便于错误处理
+                (error as any).status = fetchResponse.status;
+                throw error;
             }
             return await fetchResponse.json() as Record<string, any>;
         });
@@ -148,7 +151,10 @@ async function handleGenerateContentStream(c: Context, model: string,
             });
             if (!fetchResponse.ok) {
                 const errorText = await fetchResponse.text();
-                throw new Error(`API 请求失败，状态码: ${fetchResponse.status}: ${errorText}`);
+                const error = new Error(`API 请求失败，状态码: ${fetchResponse.status}: ${errorText}`);
+                // 添加状态码到错误对象中，便于错误处理
+                (error as any).status = fetchResponse.status;
+                throw error;
             }
             return fetchResponse.body; // 直接返回 ReadableStream
         });
@@ -265,7 +271,10 @@ async function handleEmbedContent(c: Context, model: string, apiKey: string, bod
             });
             if (!fetchResponse.ok) {
                 const errorText = await fetchResponse.text();
-                throw new Error(`API 请求失败，状态码: ${fetchResponse.status}: ${errorText}`);
+                const error = new Error(`API 请求失败，状态码: ${fetchResponse.status}: ${errorText}`);
+                // 添加状态码到错误对象中，便于错误处理
+                (error as any).status = fetchResponse.status;
+                throw error;
             }
             return await fetchResponse.json() as { embedding?: { values: number[] } }; // 为嵌入响应添加了特定类型
         });

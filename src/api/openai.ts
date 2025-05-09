@@ -27,7 +27,8 @@ oai.post('/chat/completions', async (c) => {
                 try {
                     const completion = await withRetry(model, async (key) => {
                         const openai = new OpenAI({
-                            apiKey: key, baseURL: baseURL
+                            apiKey: key, baseURL: baseURL,
+                            maxRetries: 0
                         });
 
                         return await openai.chat.completions.create({
@@ -54,7 +55,8 @@ oai.post('/chat/completions', async (c) => {
         // 非流式响应
         const response = await withRetry(model, async (key) => {
             const openai = new OpenAI({
-                apiKey: key, baseURL: baseURL
+                apiKey: key, baseURL: baseURL,
+                maxRetries: 0
             });
             
             return await openai.chat.completions.create({
@@ -74,7 +76,8 @@ oai.get('/models', async (c) => {
     try {
         const models = await withoutBalancing(async (key) => {
             const openai = new OpenAI({
-                apiKey: key, baseURL: baseURL
+                apiKey: key, baseURL: baseURL,
+                maxRetries: 0
             });
             return await openai.models.list();
         });
@@ -95,7 +98,8 @@ oai.get('/models/:model', async (c) => {
     try {
         const model = await withoutBalancing(async (key) => {
             const openai = new OpenAI({
-                apiKey: key, baseURL: baseURL
+                apiKey: key, baseURL: baseURL,
+                maxRetries: 0
             });
             return await openai.models.retrieve(modelId);
         });
@@ -120,7 +124,8 @@ oai.post('/embeddings', async (c) => {
     try {
         const embeddingResponse = await withRetry(model, async (key) => {
             const openai = new OpenAI({
-                apiKey: key, baseURL: baseURL
+                apiKey: key, baseURL: baseURL,
+                maxRetries: 0
             });
             
             return await openai.embeddings.create({

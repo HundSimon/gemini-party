@@ -312,7 +312,8 @@ class ApiKeyManager {
             errorMessage.includes('api key not valid') ||
             errorMessage.includes('quota exceeded') ||
             errorMessage.includes('rate limit') ||
-            errorMessage.includes('too many requests')
+            errorMessage.includes('too many requests') ||
+            errorMessage.includes('429')
         ) {
             return true;
         }
@@ -320,6 +321,11 @@ class ApiKeyManager {
         // 服务器错误（5xx）、Too Many Requests（429）和Bad Request（400）可以重试
         if (error.status) {
             return error.status === 400 || error.status === 429 || (error.status >= 500 && error.status < 600);
+        }
+
+        // 处理 fetch API 响应格式的错误（可能来自Gemini API）
+        if (typeof errorMessage === 'string' && errorMessage.includes('状态码: 429')) {
+            return true;
         }
 
         // 网络错误可以重试
